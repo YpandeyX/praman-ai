@@ -8,8 +8,6 @@ import {
   BookOpen,
   BookMarked,
   ShieldCheck,
-  FileText,
-  History,
   Sun,
   Moon,
 } from 'lucide-react';
@@ -29,17 +27,15 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const navItems = [
     { id: 'verify', label: 'Verify Quote', icon: Search },
-    { id: 'brief', label: 'Brief Auditor', icon: FileText, badge: 'New' },
     { id: 'batch', label: 'Batch Audit', icon: Layers },
     { id: 'history', label: 'Audit History', icon: Clock },
-    { id: 'lineage', label: 'Doctrine Lineage', icon: History, badge: 'Pro' },
-    { id: 'benchmark', label: 'Benchmark', icon: BarChart3 },
-    { id: 'corpus', label: 'Corpus', icon: BookOpen },
+    { id: 'benchmark', label: 'Benchmark & Eval', icon: BarChart3 },
+    { id: 'corpus', label: 'Landmark Corpus', icon: BookOpen },
     { id: 'methodology', label: 'Methodology', icon: BookMarked },
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-slate-900/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-800 text-white">
+    <header className="sticky top-0 z-40 bg-[#0c1322] dark:bg-[#080d19] border-b border-slate-800 text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo Brand */}
@@ -52,17 +48,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold tracking-wider text-base text-white font-serif">PRAMAN AI</span>
-                <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/40">
-                  v2.0 LegalTech
+                <span className="font-extrabold tracking-wider text-base text-white font-sans">PRAMAN AI</span>
+                <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
+                  V1.0
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400 font-medium">Deterministic Evidence Platform</p>
+              <p className="text-[10px] text-slate-400 font-medium">Intelligent Legal Evidence Platform</p>
             </div>
           </div>
 
           {/* Navigation Links */}
-          <nav className="hidden xl:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = currentTab === item.id;
@@ -70,19 +66,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => onTabChange(item.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all relative ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                     isActive
                       ? 'bg-indigo-600 text-white shadow-xs'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800/70'
                   }`}
                 >
                   <Icon size={14} />
                   <span>{item.label}</span>
-                  {item.badge && (
-                    <span className="text-[9px] px-1 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-400/30">
-                      {item.badge}
-                    </span>
-                  )}
                 </button>
               );
             })}
@@ -93,22 +84,22 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Dark / Light Toggle */}
             <button
               onClick={onToggleDarkMode}
-              className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-300 transition-colors border border-slate-700"
+              className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-amber-300 transition-colors border border-slate-700"
               title={darkMode ? 'Switch to Parchment Light Theme' : 'Switch to Midnight Dark Theme'}
             >
-              {darkMode ? <Sun size={15} /> : <Moon size={15} />}
+              {darkMode ? <Sun size={14} /> : <Moon size={14} />}
             </button>
 
             {/* SC Corpus badge */}
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-800/80 text-[11px] font-semibold text-emerald-300">
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-800/80 text-[11px] font-semibold text-emerald-300">
               <ShieldCheck size={13} className="text-emerald-400" />
               <span>SC Corpus Verified</span>
             </div>
           </div>
         </div>
 
-        {/* Mobile / Responsive Nav Bar */}
-        <div className="xl:hidden flex items-center gap-1 py-2 overflow-x-auto border-t border-slate-800/60">
+        {/* Mobile Nav Bar */}
+        <div className="md:hidden flex items-center gap-1 py-2 overflow-x-auto border-t border-slate-800/60">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;
