@@ -26,11 +26,8 @@ export const CorpusView: React.FC = () => {
     setSelectedSourceId(id);
     setDetailLoading(true);
     try {
-      const res = await fetch(`/api/sources/${id}`);
-      if (res.ok) {
-        const d = await res.json();
-        setSourceDetail(d);
-      }
+      const d = await api.getSourceDetail(id);
+      setSourceDetail(d);
     } catch (e) {
       console.error(e);
     } finally {

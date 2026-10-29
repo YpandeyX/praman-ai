@@ -7,7 +7,7 @@ import {
   EvaluationReportResponse,
 } from '../types';
 
-const API_BASE = '/api';
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'https://praman-ai-dlpx.onrender.com/api').replace(/\/$/, '');
 
 export const api = {
   async verifyQuote(payload: VerifyQuoteRequest): Promise<VerifyQuoteResponse> {
@@ -51,6 +51,12 @@ export const api = {
   async getSources(): Promise<JudgmentOut[]> {
     const res = await fetch(`${API_BASE}/sources`);
     if (!res.ok) throw new Error('Failed to fetch judgment sources');
+    return res.json();
+  },
+
+  async getSourceDetail(id: number): Promise<any> {
+    const res = await fetch(`${API_BASE}/sources/${id}`);
+    if (!res.ok) throw new Error('Failed to fetch judgment detail');
     return res.json();
   },
 
