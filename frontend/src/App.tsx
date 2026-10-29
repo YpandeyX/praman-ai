@@ -125,7 +125,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#080d19] flex font-sans text-slate-900 selection:bg-indigo-600 selection:text-white antialiased">
+    <div className="min-h-screen bg-[#f8fafc] flex font-sans text-slate-900 selection:bg-indigo-600 selection:text-white antialiased">
       {/* Left Sidebar */}
       <Sidebar
         currentTab={currentTab}
@@ -141,7 +141,7 @@ export function App() {
         <main className="p-5 sm:p-7 max-w-[1720px] w-full mx-auto flex-1">
           {(currentTab === 'home' || currentTab === 'verify') && (
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
-              {/* Left Column: Form & History & Quick Cards */}
+              {/* Left Column: Form & History */}
               <div className="xl:col-span-7 space-y-6">
                 <DashboardWorkspace
                   onVerify={handleVerify}
@@ -154,8 +154,8 @@ export function App() {
                 />
               </div>
 
-              {/* Right Column: Verification Result Panel */}
-              <div className="xl:col-span-5 sticky top-20">
+              {/* Right Column: Verification Result & Stats Panel */}
+              <div className="xl:col-span-5 space-y-6">
                 <VerificationResultPanel
                   result={activeResult}
                   onBack={() => setActiveResult(defaultResult)}
