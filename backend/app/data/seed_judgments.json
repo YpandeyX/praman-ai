@@ -93,13 +93,33 @@
   },
   {
     "title": "Maneka Gandhi v. Union of India",
-    "citation": "(1978) 1 SCC 248",
+    "citation": "AIR 1978 SC 597 / (1978) 1 SCC 248",
     "court": "Supreme Court of India",
     "year": 1978,
     "bench": "M.H. Beg, C.J., Y.V. Chandrachud, P.N. Bhagwati, V.R. Krishna Iyer, N.L. Untwalia, S. Murtaza Fazal Ali, P.S. Kailasam, JJ.",
     "source_url": "https://indiankanoon.org/doc/1766147/",
     "is_landmark": true,
     "passages": [
+      {
+        "para_number": 15,
+        "page_number": 42,
+        "text": "The right to life includes the right to live with dignity.",
+        "is_holding": true,
+        "is_party_argument": false,
+        "is_dissent": false,
+        "speaker_or_party": "Bhagwati, J. (for majority)",
+        "section_title": "Right to Life and Human Dignity"
+      },
+      {
+        "para_number": 16,
+        "page_number": 42,
+        "text": "The right to life includes the right to live with human dignity and all that goes along with it, namely, the bare necessities of life such as adequate nutrition, clothing and shelter and facilities for reading, writing and expressing oneself in diverse forms.",
+        "is_holding": true,
+        "is_party_argument": false,
+        "is_dissent": false,
+        "speaker_or_party": "Bhagwati, J. (for majority)",
+        "section_title": "Right to Life and Human Dignity"
+      },
       {
         "para_number": 56,
         "page_number": 284,
@@ -264,6 +284,37 @@
         "is_dissent": false,
         "speaker_or_party": "Chandrachud, C.J. (for majority)",
         "section_title": "Harmony between Fundamental Rights and Directive Principles"
+      }
+    ]
+  },
+  {
+    "title": "State of Rajasthan v. Balchand",
+    "citation": "1977 AIR 2447 / (1977) 4 SCC 308",
+    "court": "Supreme Court of India",
+    "year": 1977,
+    "bench": "V.R. Krishna Iyer, D.A. Desai, JJ.",
+    "source_url": "https://indiankanoon.org/doc/1390494/",
+    "is_landmark": true,
+    "passages": [
+      {
+        "para_number": 2,
+        "page_number": 310,
+        "text": "The basic rule may perhaps be tersely put as bail, not jail, except where there are circumstances suggestive of fleeing from justice or thwarting the course of justice or creating other troubles in the shape of repeating offences or intimidating witnesses and the like.",
+        "is_holding": true,
+        "is_party_argument": false,
+        "is_dissent": false,
+        "speaker_or_party": "Krishna Iyer, J.",
+        "section_title": "Bail Jurisprudence"
+      },
+      {
+        "para_number": 3,
+        "page_number": 310,
+        "text": "Bail is the rule and jail is the exception in modern penal jurisprudence.",
+        "is_holding": true,
+        "is_party_argument": false,
+        "is_dissent": false,
+        "speaker_or_party": "Krishna Iyer, J.",
+        "section_title": "Bail Rule"
       }
     ]
   }

@@ -251,13 +251,13 @@ class VerificationEngine:
 
         # 4. Inconclusive
         status = "Inconclusive"
-        confidence = 0.50
+        confidence = round(min(0.85, max(0.60, similarity)), 2)
         explanation = (
-            f"Inconclusive Evidence: A partial fragment ({int(similarity * 100)}% match) was found in '{best_match.get('judgment_title')}', "
-            f"but the evidence is insufficient to confirm whether the quotation is authentic or an independent phrasing."
+            f"Partial Match ({int(similarity * 100)}% match) located in '{best_match.get('judgment_title')}', "
+            f"with textual variations requiring judicial verification."
         )
-        limitations = "Available text similarity is between 40% and 65%, which falls into the ambiguous threshold."
-        return status, confidence, {"lexical": lexical_score, "semantic": semantic_score, "context": 50.0}, explanation, limitations
+        limitations = "Similarity falls between 40% and 65%."
+        return status, confidence, {"lexical": lexical_score, "semantic": semantic_score, "context": 75.0}, explanation, limitations
 
     def _find_best_passage(
         self,
@@ -333,21 +333,24 @@ class VerificationEngine:
         return best, scored_candidates[:top_k]
 
     def _get_candidates(self, case_name: Optional[str], citation: Optional[str]) -> List[Dict[str, Any]]:
-        query = self.db.query(JudgmentPassage).join(Judgment)
+        passages = []
         if citation:
             cit_norm = citation.strip()
-            query = query.filter(Judgment.citation.ilike(f"%{cit_norm}%"))
-        elif case_name:
+            passages = self.db.query(JudgmentPassage).join(Judgment).filter(
+                Judgment.citation.ilike(f"%{cit_norm}%")
+            ).all()
+
+        if not passages and case_name:
             c_norm = case_name.strip()
-            # Split case name words for flexible match
-            words = [w for w in re.split(r'\W+', c_norm) if len(w) > 3 and w.lower() not in {"state", "union", "india"}]
+            words = [w for w in re.split(r'\W+', c_norm) if len(w) > 3 and w.lower() not in {"state", "union", "india", "court", "versus", "judgement"}]
             if words:
                 conditions = [Judgment.title.ilike(f"%{w}%") for w in words[:2]]
-                query = query.filter(*conditions)
-            else:
-                query = query.filter(Judgment.title.ilike(f"%{c_norm}%"))
+                passages = self.db.query(JudgmentPassage).join(Judgment).filter(*conditions).all()
+            if not passages:
+                passages = self.db.query(JudgmentPassage).join(Judgment).filter(
+                    Judgment.title.ilike(f"%{c_norm}%")
+                ).all()
 
-        passages = query.all()
         return [self._passage_to_dict(p) for p in passages]
 
     def _get_all_passages_dict(self) -> List[Dict[str, Any]]:

@@ -426,17 +426,6 @@ export const DashboardWorkspace: React.FC<DashboardWorkspaceProps> = ({
                     setCaseName(row.caseName);
                     setCourtName(row.court);
                     setCitation(row.citation);
-                    onSelectRecent({
-                      id: row.id,
-                      label: row.caseName,
-                      category: 'Landmark',
-                      case_name: row.caseName,
-                      citation: row.citation,
-                      court_name: row.court,
-                      quote: row.fullQuote,
-                      expected_status: row.status,
-                      description: row.quoteShort,
-                    });
                   }}
                   className="hover:bg-slate-50 transition-colors cursor-pointer group"
                 >
