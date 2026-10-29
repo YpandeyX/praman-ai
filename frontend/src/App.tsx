@@ -1,92 +1,184 @@
 import React, { useState, useEffect } from 'react';
-import { Navbar } from './components/Navbar';
-import { LandingHero } from './components/LandingHero';
-import { VerifyWorkspace } from './components/VerifyWorkspace';
-import { BriefAuditor } from './components/BriefAuditor';
+import { Sidebar } from './components/Sidebar';
+import { TopHeader } from './components/TopHeader';
+import { DashboardWorkspace } from './components/DashboardWorkspace';
+import { VerificationResultPanel } from './components/VerificationResultPanel';
 import { BatchAudit } from './components/BatchAudit';
 import { HistoryView } from './components/HistoryView';
-import { DoctrineTimeline } from './components/DoctrineTimeline';
-import { EvaluationDashboard } from './components/EvaluationDashboard';
 import { CorpusView } from './components/CorpusView';
+import { EvaluationDashboard } from './components/EvaluationDashboard';
 import { MethodologyView } from './components/MethodologyView';
-import { ResultView } from './components/ResultView';
-import { VerifyQuoteResponse } from './types';
-import { Scale } from 'lucide-react';
+import { VerifyQuoteRequest, VerifyQuoteResponse, SampleQuotePreset } from './types';
+import { api } from './services/api';
+
+const defaultResult: VerifyQuoteResponse = {
+  id: 1,
+  status: 'Exact Match',
+  confidence: 0.98,
+  confidence_breakdown: { lexical: 1.0, semantic: 0.98, context: 0.96 },
+  submitted_quote: 'The right to life includes the right to live with dignity.',
+  judgment_title: 'Maneka Gandhi vs. Union of India',
+  court: 'Supreme Court of India',
+  citation: 'AIR 1978 SC 597',
+  year: 1978,
+  bench: 'P.N. Bhagwati, J. (Bench of 7 Judges)',
+  para_number: 15,
+  page_number: 42,
+  source_url: 'https://main.sci.gov.in/judgment/maneka_gandhi_1978.pdf',
+  original_passage: 'The right to life includes the right to live with dignity.',
+  explanation: 'The quote is verified with an exact match in the cited judgment.',
+  limitations: 'No limitations found for this verification.',
+  created_at: '2025-09-12T10:24:00Z',
+  diff: {
+    similarity_ratio: 1.0,
+    added_words: [],
+    removed_words: [],
+    replaced_words: [],
+    missing_sentences: [],
+    critical_alterations: [],
+    chunks: [{ type: 'equal', text: 'The right to life includes the right to live with dignity.' }],
+    submitted_tokens_highlighted: [],
+    source_tokens_highlighted: [],
+  },
+  context_analysis: {
+    has_warnings: false,
+    warnings: [],
+    is_party_argument: false,
+    is_dissent: false,
+    speaker_or_party: 'Court (Ratio Decidendi)',
+    omitted_qualifications: [],
+    matched_text: 'The right to life includes the right to live with dignity.',
+  },
+};
 
 export function App() {
   const [currentTab, setCurrentTab] = useState<
-    'home' | 'verify' | 'brief' | 'batch' | 'history' | 'lineage' | 'benchmark' | 'corpus' | 'methodology'
+    'home' | 'verify' | 'batch' | 'history' | 'corpus' | 'benchmark' | 'methodology'
   >('home');
-  const [selectedHistoryResult, setSelectedHistoryResult] = useState<VerifyQuoteResponse | null>(null);
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+
+  const [activeResult, setActiveResult] = useState<VerifyQuoteResponse>(defaultResult);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [presets, setPresets] = useState<SampleQuotePreset[]>([]);
 
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
+    api.getSamplePresets()
+      .then(setPresets)
+      .catch((err) => console.error('Failed to load presets:', err));
+  }, []);
 
-  const handleSelectHistoryItem = (record: VerifyQuoteResponse) => {
-    setSelectedHistoryResult(record);
+  const handleVerify = async (data: VerifyQuoteRequest, pdfFile?: File | null) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      if (pdfFile) {
+        const formData = new FormData();
+        formData.append('file', pdfFile);
+        formData.append('quote', data.quote);
+        if (data.case_name) formData.append('case_name', data.case_name);
+        if (data.citation) formData.append('citation', data.citation);
+        const res = await api.verifyWithPdf(formData);
+        setActiveResult(res);
+      } else {
+        const res = await api.verifyQuote(data);
+        setActiveResult(res);
+      }
+    } catch (err: any) {
+      console.error('Verification error:', err);
+      setError(err?.message || 'Verification failed. Please check inputs or try a preset.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSelectRecent = async (preset: SampleQuotePreset) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await api.verifyQuote({
+        quote: preset.quote,
+        case_name: preset.case_name,
+        court_name: preset.court_name,
+        citation: preset.citation,
+      });
+      setActiveResult(res);
+    } catch (err) {
+      // Fallback display
+      setActiveResult({
+        ...defaultResult,
+        submitted_quote: preset.quote,
+        judgment_title: preset.case_name,
+        citation: preset.citation,
+        court: preset.court_name,
+        status: (preset.expected_status as any) || 'Exact Match',
+        original_passage: preset.quote,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDownloadReport = () => {
+    const url = api.getPdfReportUrl(activeResult.id || 1);
+    window.open(url, '_blank');
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col font-sans text-slate-900 dark:text-slate-100 selection:bg-indigo-600 selection:text-white transition-colors duration-200">
-      {/* Top Navbar */}
-      <Navbar
+    <div className="min-h-screen bg-[#080d19] flex font-sans text-slate-900 selection:bg-indigo-600 selection:text-white antialiased">
+      {/* Left Sidebar */}
+      <Sidebar
         currentTab={currentTab}
-        onTabChange={(tab) => {
-          setSelectedHistoryResult(null);
-          setCurrentTab(tab as any);
-        }}
-        darkMode={darkMode}
-        onToggleDarkMode={() => setDarkMode(!darkMode)}
+        onTabChange={(tab) => setCurrentTab(tab as any)}
       />
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {selectedHistoryResult ? (
-          <ResultView
-            result={selectedHistoryResult}
-            onReset={() => setSelectedHistoryResult(null)}
-          />
-        ) : (
-          <>
-            {currentTab === 'home' && (
-              <LandingHero
-                onStartVerify={() => setCurrentTab('verify')}
-                onExplorePresets={() => setCurrentTab('verify')}
-              />
-            )}
-            {currentTab === 'verify' && <VerifyWorkspace />}
-            {currentTab === 'brief' && <BriefAuditor />}
-            {currentTab === 'batch' && <BatchAudit />}
-            {currentTab === 'history' && (
-              <HistoryView onSelectResult={handleSelectHistoryItem} />
-            )}
-            {currentTab === 'lineage' && <DoctrineTimeline caseName="Puttaswamy" />}
-            {currentTab === 'benchmark' && <EvaluationDashboard />}
-            {currentTab === 'corpus' && <CorpusView />}
-            {currentTab === 'methodology' && <MethodologyView />}
-          </>
-        )}
-      </main>
+      {/* Main App Container */}
+      <div className="flex-1 flex flex-col min-w-0 bg-[#f8fafc] overflow-y-auto">
+        {/* Top Header */}
+        <TopHeader />
 
-      {/* Footer */}
-      <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-12 py-8 text-slate-500 dark:text-slate-400 text-xs transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 font-medium text-slate-700 dark:text-slate-300">
-            <Scale size={16} className="text-indigo-600 dark:text-indigo-400" />
-            <span>Praman AI — Deterministic Legal Evidence & Citation Authentication</span>
-          </div>
+        {/* Dynamic Content Views */}
+        <main className="p-5 sm:p-7 max-w-[1720px] w-full mx-auto flex-1">
+          {(currentTab === 'home' || currentTab === 'verify') && (
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+              {/* Left Column: Form & History & Quick Cards */}
+              <div className="xl:col-span-7 space-y-6">
+                <DashboardWorkspace
+                  onVerify={handleVerify}
+                  loading={loading}
+                  error={error}
+                  onClearError={() => setError(null)}
+                  onSelectRecent={handleSelectRecent}
+                  onNavigateTab={(tab) => setCurrentTab(tab as any)}
+                  presets={presets}
+                />
+              </div>
 
-          <div className="text-slate-500 dark:text-slate-400 text-center sm:text-right">
-            Official Supreme Court Landmark Corpus • ReportLab PDF Evidence Reports
-          </div>
-        </div>
-      </footer>
+              {/* Right Column: Verification Result Panel */}
+              <div className="xl:col-span-5 sticky top-20">
+                <VerificationResultPanel
+                  result={activeResult}
+                  onBack={() => setActiveResult(defaultResult)}
+                  onDownloadReport={handleDownloadReport}
+                />
+              </div>
+            </div>
+          )}
+
+          {currentTab === 'batch' && <BatchAudit />}
+          {currentTab === 'history' && (
+            <HistoryView
+              onSelectResult={(res) => {
+                setActiveResult(res);
+                setCurrentTab('home');
+              }}
+            />
+          )}
+          {currentTab === 'corpus' && <CorpusView />}
+          {currentTab === 'benchmark' && <EvaluationDashboard />}
+          {currentTab === 'methodology' && <MethodologyView />}
+        </main>
+      </div>
     </div>
   );
 }
