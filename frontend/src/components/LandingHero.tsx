@@ -16,30 +16,60 @@ interface LandingHeroProps {
 
 export const LandingHero: React.FC<LandingHeroProps> = ({ onStartVerify, onExplorePresets }) => {
   return (
-    <div className="space-y-12 py-4">
+    <div className="space-y-12 py-6">
       {/* Hero Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-5">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/80 dark:border-indigo-800 text-xs font-semibold text-indigo-700 dark:text-indigo-300 shadow-2xs">
-          <Scale size={14} className="text-indigo-600 dark:text-indigo-400" />
+      <div className="text-center max-w-4xl mx-auto space-y-5 flex flex-col items-center">
+        {/* Top Pill Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/80 text-xs font-semibold text-indigo-700 shadow-2xs">
+          <Scale size={14} className="text-indigo-600" />
           <span>Intelligent Legal Quote Verification & Evidence Platform</span>
         </div>
 
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+        {/* Headline with Exact Wavy Underline */}
+        <h1 className="text-4xl sm:text-5xl md:text-[54px] font-black text-slate-900 tracking-tight leading-[1.2] text-center pt-1">
           Every Legal Quote.{' '}
-          <span className="text-indigo-600 dark:text-indigo-400 underline decoration-indigo-400 decoration-wavy decoration-2 sm:decoration-3 underline-offset-8">
-            Verified with
+          <span className="inline-block relative text-indigo-600 align-top">
+            <span>Verified with</span>
+            <svg
+              className="w-full h-3 sm:h-3.5 text-indigo-500 mt-1 block"
+              viewBox="0 0 220 16"
+              fill="none"
+              preserveAspectRatio="none"
+            >
+              <path
+                d="M2 8 C 12 0, 18 16, 28 8 C 38 0, 44 16, 54 8 C 64 0, 70 16, 80 8 C 90 0, 96 16, 106 8 C 116 0, 122 16, 132 8 C 142 0, 148 16, 158 8 C 168 0, 174 16, 184 8 C 194 0, 200 16, 210 8 C 214 4, 217 12, 218 8"
+                stroke="#6366f1"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
+            </svg>
           </span>
           <br />
-          <span className="text-indigo-600 dark:text-indigo-400 underline decoration-indigo-400 decoration-wavy decoration-2 sm:decoration-3 underline-offset-8">
-            Evidence.
+          <span className="inline-block relative text-indigo-600 align-top mt-1">
+            <span>Evidence.</span>
+            <svg
+              className="w-full h-3 sm:h-3.5 text-indigo-500 mt-1 block"
+              viewBox="0 0 150 16"
+              fill="none"
+              preserveAspectRatio="none"
+            >
+              <path
+                d="M2 8 C 12 0, 18 16, 28 8 C 38 0, 44 16, 54 8 C 64 0, 70 16, 80 8 C 90 0, 96 16, 106 8 C 116 0, 122 16, 132 8 C 140 2, 144 14, 148 8"
+                stroke="#6366f1"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
+            </svg>
           </span>
         </h1>
 
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal max-w-2xl mx-auto">
+        {/* Subtitle description */}
+        <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-3xl mx-auto pt-1">
           AI systems hallucinate court citations. Legal briefs omit essential qualifications. Praman AI mathematically verifies quotations against authentic Indian court judgments, computes word-level Myers diffs, detects party submission conflations, and certifies results with downloadable evidence certificates.
         </p>
 
-        <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+        {/* Action Buttons */}
+        <div className="pt-3 flex flex-wrap items-center justify-center gap-3.5">
           <button
             onClick={onStartVerify}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-indigo-500/25 transition-all cursor-pointer"
@@ -50,42 +80,42 @@ export const LandingHero: React.FC<LandingHeroProps> = ({ onStartVerify, onExplo
 
           <button
             onClick={onExplorePresets}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs sm:text-sm shadow-xs transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs sm:text-sm shadow-xs transition-all cursor-pointer"
           >
-            <Sparkles size={16} className="text-indigo-600 dark:text-indigo-400" />
+            <Sparkles size={16} className="text-indigo-600" />
             <span>Interactive Live Presets</span>
           </button>
         </div>
       </div>
 
-      {/* 3 Core Pillars */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
+      {/* 3 Core Pillars Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-3 transition-shadow hover:shadow-md">
+          <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
             <FileCheck size={20} />
           </div>
-          <h3 className="font-bold text-slate-900 dark:text-white text-base">Proof-Carrying Verification</h3>
-          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          <h3 className="font-bold text-slate-900 text-base">Proof-Carrying Verification</h3>
+          <p className="text-xs text-slate-500 leading-relaxed">
             Every verification anchors directly to a verified paragraph in the court judgment record. Never rely on unsupported LLM opinions.
           </p>
         </div>
 
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-3 transition-shadow hover:shadow-md">
+          <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
             <GitCompare size={20} />
           </div>
-          <h3 className="font-bold text-slate-900 dark:text-white text-base">Word-Level Explainable Diff</h3>
-          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          <h3 className="font-bold text-slate-900 text-base">Word-Level Explainable Diff</h3>
+          <p className="text-xs text-slate-500 leading-relaxed">
             Pinpoints exact additions, deletions, and substitutions. Alerts users to critical modal shifts like reversing <i>shall</i> into <i>may</i>.
           </p>
         </div>
 
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold">
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-3 transition-shadow hover:shadow-md">
+          <div className="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center font-bold">
             <AlertTriangle size={20} />
           </div>
-          <h3 className="font-bold text-slate-900 dark:text-white text-base">Context & Attribution Integrity</h3>
-          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          <h3 className="font-bold text-slate-900 text-base">Context & Attribution Integrity</h3>
+          <p className="text-xs text-slate-500 leading-relaxed">
             Detects whether a quote is merely an argument submitted by party counsel, a minority dissenting opinion, or an excerpt omitting statutory caveats.
           </p>
         </div>
